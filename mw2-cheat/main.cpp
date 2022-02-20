@@ -29,7 +29,7 @@ int main() {
 	//TIMER TO SEPERATE TOGGLES
 	unsigned long ulOnePressTimer = clock();
 
-	//	Mem.WriteProcess<long>(0x004B751E, (long)2268696720); // PATCHING COLD BLOODED should be xd
+	Mem.WriteProcess<long>(0x004B751E, 3897987216); // nopping COLD BLOODED check for red boxes should be xd
 
 
 	//HELPS FIND LOBBIES
