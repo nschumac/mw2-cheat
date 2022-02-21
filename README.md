@@ -4,5 +4,4 @@
 This was Project i worked on when i first started getting interested in Reverse Engineering.
 In this project im "hacking" the steam verison "Call of Duty - Modern Warfare 2".
 
-## Presentation:
-!(https://github.com/nschumac/mw2-cheat/blob/main/resources/iw4mp_iERX9GOjVn.gif)
+![](https://github.com/nschumac/mw2-cheat/blob/main/resources/iw4mp_iERX9GOjVn.gif)
