@@ -27,9 +27,9 @@ int main() {
 	mem Mem("iw4mp.exe");
 
 	//TIMER TO SEPERATE TOGGLES
-	unsigned long ulOnePressTimer = clock();
+	long ulOnePressTimer = clock();
 
-	Mem.WriteProcess<long>(0x004B751E, 3897987216); // nopping COLD BLOODED check for red boxes should be xd
+	Mem.WriteProcess<long>(0x004B751E, 2268696720); // nopping COLD BLOODED check for red boxes should be xd
 
 
 	//HELPS FIND LOBBIES
@@ -47,17 +47,17 @@ int main() {
 
 		//CHECKING FOR KEY PRESSES
 		if (clock() - ulOnePressTimer > 250) {
-			if (GetAsyncKeyState(VK_NUMPAD1) & 0x8000) { // CHANGE THE KEYS TO WHAT YOU LIKE | https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
+			if (GetAsyncKeyState(VK_F1) & 0x8000) { // CHANGE THE KEYS TO WHAT YOU LIKE | https://docs.microsoft.com/en-us/windows/win32/inputdev/virtual-key-codes
 				values.bRedBoxes = !values.bRedBoxes;
-				Mem.WriteProcess<unsigned long>(0x004885A5, values.bRedBoxes ? 3897987216 : 3897952628); //NOPPING
+				Mem.WriteProcess<long>(0x004885A5, values.bRedBoxes ? 3897987216 : 3897952628); //NOPPING
 				ulOnePressTimer = clock();
 			}
-			else if (GetAsyncKeyState(VK_NUMPAD2) & 0x8000) {
+			else if (GetAsyncKeyState(VK_F2) & 0x8000) {
 				values.bNoRecoil = !values.bNoRecoil;
-				//Mem.WriteProcess<BYTE>(0x004B9FCB, values.bNoRecoil ? 117 : 116); // PATCHING //CRASHES WILL FIx iN THE FUTURE
+				Mem.WriteProcess<BYTE>(0x004B9FCB, values.bNoRecoil ? 235 : 116); // PATCHING je -> jmp
 				ulOnePressTimer = clock();
 			}
-			else if (GetAsyncKeyState(VK_NUMPAD3) & 0x8000) {
+			else if (GetAsyncKeyState(VK_F3) & 0x8000) {
 				values.bNametags = !values.bNametags;
 				Mem.WriteProcess<BYTE>(0x004879FC, values.bNametags ? (BYTE)0x84 : (BYTE)15);//PATCHING
 				Mem.WriteProcess<unsigned long>(0x004877F0, values.bNametags ? 3296919984 : 3296968754); //NOPPING

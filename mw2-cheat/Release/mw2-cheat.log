@@ -1,0 +1,8 @@
+﻿  main.cpp
+C:\Users\Pot4t0\Desktop\mw2-cheat\mw2-cheat\main.cpp(32,37): warning C4309: 'argument': truncation of constant value
+  Generating code
+  1 of 172 functions ( 0.6%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  mw2-cheat.vcxproj -> C:\Users\Pot4t0\Desktop\mw2-cheat\Release\mw2-cheat.exe
