@@ -37,13 +37,20 @@ int main() {
 	Mem.WriteProcess<int>(0x06644390, 300, 0xC);
 	Mem.WriteProcess<int>(0x1B8C7A9 + 0x80, 0x0000);
 
+	//MODULEENTRY32 mw2_exe;
+	//if (!Mem.getModule("iw4mp.exe", mw2_exe))
+	//	return 1;
+	DWORD addy = Mem.sigScan(0x00401000, 0x0065CB2F, "8B 0D ? ? ? ? D9 41 0C 56 68 D0 0E 8A 00", 2, true, 0);
 
+
+	Mem.WriteProcess<BYTE>(0x004AFB68,{(BYTE)0xB0, (BYTE)0x01, (BYTE)0x90}, 3);
+	Mem.WriteProcess<BYTE>(0x004B1DA0,{(BYTE)0xC3, (BYTE)0x01, (BYTE)0x90}, 1);
 
 	//LOOP THAT CHANGES VALUES INGAME
 	while (!GetAsyncKeyState(VK_ADD)) {
 
 		//FOV RESETS ON DEATH SO JUST KEEP WRITING IT
-		Mem.WriteProcess<float>(0x00AAC278, values.fFov, 0xC); // 0x6392ec40 + 0xC Without the Offset
+		Mem.WriteProcess<float>(addy, values.fFov, 0xC); // 0x6392ec40 + 0xC Without the Offset
 
 		//CHECKING FOR KEY PRESSES
 		if (clock() - ulOnePressTimer > 250) {
