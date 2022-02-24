@@ -11,6 +11,63 @@ struct Values {
 Values values;
 
 
+void endGame(mem& Mem)
+{
+	DWORD cBuf = 0x00563D10;
+	int serverNum = Mem.ReadProcesss<int>(0x0B58150);
+
+	typedef struct
+	{
+		char *str;
+		int	num;
+		int ret;
+	}s_cBuf;
+
+
+	s_cBuf buf = {0};
+
+	char buffer[35];
+
+	snprintf(buffer, 35, "cmd mr %i -1 endround\n", serverNum);
+	buf.num = 0;
+
+	void* mymem = VirtualAllocEx(Mem.getHandle(), 0, 0x1000, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	if (!mymem)
+		return;
+
+	buf.str = (char *)mymem;
+
+
+	BYTE bytes[] = {
+		0xB8, 0x00, 0x00, 0x00, 0x00,
+		0xFF, 0x30,
+		0xFF, 0x70, 0x4,
+		0xB8, 0x00, 0x00, 0x00, 0x00,
+		0xFF, 0xD0,
+		0x83, 0xC4, 0x8,
+		0xC3, 0x90 };
+
+	*(uintptr_t*)(&bytes[1]) = (uintptr_t)mymem + sizeof(buffer);
+	*(uintptr_t*)(&bytes[11]) = (uintptr_t)cBuf;
+
+	WriteProcessMemory(Mem.getHandle(), mymem, &buffer, sizeof(buffer), NULL);
+	WriteProcessMemory(Mem.getHandle(), (void*)((uintptr_t)mymem + sizeof(buffer)), &buf, sizeof(buf), NULL);
+	WriteProcessMemory(Mem.getHandle(), (void*)((uintptr_t)mymem + sizeof(buffer) + sizeof(buf)), bytes, sizeof(bytes), NULL);
+
+	HANDLE hThread = CreateRemoteThread(Mem.getHandle(), 0, 0, (LPTHREAD_START_ROUTINE)(void*)((uintptr_t)mymem + sizeof(buffer) + sizeof(buf)), 0, 0, 0);
+	if (!hThread)
+	{
+		VirtualFreeEx(Mem.getHandle(), mymem, 0, MEM_RELEASE);
+		return;
+	}
+
+
+	WaitForSingleObject(hThread, INFINITE);
+
+	VirtualFreeEx(Mem.getHandle(), mymem, 0, MEM_RELEASE);
+
+}
+
 
 
 int main() {
@@ -70,6 +127,11 @@ int main() {
 				Mem.WriteProcess<unsigned long>(0x004877F0, values.bNametags ? 3296919984 : 3296968754); //NOPPING
 				ulOnePressTimer = clock();
 			}
+			else if (GetAsyncKeyState(VK_F4) & 0x8000)
+			{
+				endGame(Mem);
+				ulOnePressTimer = clock();
+			}
 			else if (GetAsyncKeyState(VK_LEFT) & 0x8000) {
 				values.fFov -= 5;
 				ulOnePressTimer = clock();
@@ -82,7 +144,6 @@ int main() {
 
 		//PRINT MENU / UPDATE AFTER VALUE HAS CHANGED
 		if (clock() - 10 <= ulOnePressTimer) {
-			system("cls");
 			printf("[ARROW] Field Of View: %.0f\n", values.fFov);
 			printf("[NUM 1] Red Boxes: %s\n", values.bRedBoxes ? "Online" : "Offline");
 			printf("[NUM 2] No Recoil: %s\n", values.bNoRecoil ? "Online" : "Offline");

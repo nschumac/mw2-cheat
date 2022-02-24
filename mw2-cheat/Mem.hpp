@@ -30,6 +30,16 @@ public:
 	template<class T>
 	void WriteProcess(DWORD addy, T value, BYTE Offset);
 
+	template<class T>
+	T ReadProcesss(DWORD addy, unsigned int size = sizeof(T))
+	{
+		T ret;
+		ReadProcessMemory(this->hGameHandle, (LPCVOID)addy, (LPVOID)&ret, size, NULL);
+		return ret;
+	}
+
+	HANDLE getHandle() { return this->hGameHandle; }
+
 	mem(const char* sProcessName);
 	~mem();
 
@@ -39,6 +49,7 @@ template<class T>
 inline void mem::WriteProcess(DWORD addy, T value) {
 	WriteProcessMemory(this->hGameHandle, (LPVOID)addy, (LPCVOID)&value, sizeof(value), NULL);
 }
+
 
 template<class T>
 inline void mem::WriteProcess(DWORD addy, T value, BYTE Offset) {
